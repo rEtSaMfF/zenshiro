@@ -1,0 +1,27 @@
+TO DO 
+------------------
+Jump Tweaking
+Graphics
+Sound Effects
+General Balancing/Play Testing
+Obstacles
+	Spikes
+	Fire Pillar
+	Fire Wave
+Particles - Jacob
+Extra Lives - Calvin
+
+
+Done
+------------------
+
+Tracking - Done
+Bomb - Done besides tweaking
+Momentum - Done besides tweaking
+Melee Enemies - Done
+Jump - Done
+Miniboss - Done
+Health Bars - Done
+Sidebar - Done
+Animation for Zenshiro + enemy samurai- Done
+Continues

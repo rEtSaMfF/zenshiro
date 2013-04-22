@@ -1,0 +1,57 @@
+import pygame
+from PlayerBullet import *
+from PlayerSword import *
+from HomingMissile import *
+import math
+
+class MissileTurret(pygame.sprite.Sprite):
+    def __init__(self,x,y,creator):
+        pygame.sprite.Sprite.__init__(self)
+        self.game=creator
+        self.rect=pygame.Rect(x-16,y-16,32,32)
+        self.hspd=0
+        self.vspd=0
+        self.hpmax=15
+        self.hp=self.hpmax
+        #shooting stuff
+        self.shootalarmmax=48
+        self.shootalarm=self.shootalarmmax
+        self.imageind=0.0
+    def update(self):
+        #moving
+        self.vspd=self.game.scrollspeed
+        self.rect.move_ip(self.hspd,self.vspd)
+        
+        if self.rect.top>480:
+            self.game.removeEnemy(self)
+        if self.hp<=0:
+            self.game.removeEnemy(self)
+            self.game.player.kills+=1
+            self.game.player.score+=self.hpmax*10
+            self.game.addExplosion(self.rect.left,self.rect.top)
+        #shooting
+        self.shootalarm-=1
+        if self.shootalarm<=0:
+            self.shootalarm=self.shootalarmmax
+            self.shoot()
+            
+        addind=0.0
+        addind+=self.game.scrollspeed
+        addind+=self.vspd
+        addind+=abs(self.hspd/4)
+        self.imageind+=(addind/10)
+    def draw(self,screen):
+        drect=pygame.Rect((math.floor(self.imageind)%6)*32,0,32,32)
+        screen.blit(self.game.spr_MissileTurret,self.rect,drect)
+    def collision(self,other):
+        if isinstance(other,PlayerBullet):
+            self.hp-=other.damage
+            self.game.removePlayerBullet(other)
+        if isinstance(other,PlayerSword):
+            self.hp-=other.damage
+            if other.player.shoottimer>8:
+                other.player.shoottimer=8
+        if isinstance(other,PlayerBomb):
+            self.hp-=other.damage
+    def shoot(self):
+        self.game.addHomingMissile(self.rect.centerx,self.rect.centery,0,6)
